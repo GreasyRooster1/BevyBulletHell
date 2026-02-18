@@ -1,8 +1,15 @@
 use crate::*;
 use bevy::prelude::*;
+use std::time::Duration;
 
 #[derive(Component)]
 pub struct Speed(f32);
+
+#[derive(Component)]
+pub struct Dash {
+    speed: f32,
+    timer: Timer,
+}
 
 pub struct PlayerPlugin;
 
@@ -17,6 +24,10 @@ fn spawn_player(mut commands: Commands, handle: Res<PlaceholderTex>) {
     commands.spawn((
         Player,
         Speed(4.0),
+        Dash {
+            speed: 7.0,
+            timer: Timer::new(Duration::from_millis(500), TimerMode::Once),
+        },
         Transform::from_xyz(0.0, 0.0, 0.0),
         Sprite::from_image(handle.0.clone()),
     ));
@@ -44,3 +55,16 @@ fn move_player(
         t.translation += move_vec;
     }
 }
+
+fn dash_player(
+    mut query: Query<(&Dash, &mut Speed), With<Player>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+) {
+    for (dash, mut speed) in query.iter_mut() {
+        if !keyboard_input.just_pressed(KeyCode::Space) {
+            continue;
+        }
+        speed.0 = dash.speed;
+    }
+}
+
