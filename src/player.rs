@@ -16,7 +16,7 @@ impl Plugin for PlayerPlugin {
 fn spawn_player(mut commands: Commands, handle: Res<PlaceholderTex>) {
     commands.spawn((
         Player,
-        Speed(3.0),
+        Speed(4.0),
         Transform::from_xyz(0.0, 0.0, 0.0),
         Sprite::from_image(handle.0.clone()),
     ));
@@ -27,17 +27,21 @@ fn move_player(
     keyboard_input: Res<ButtonInput<KeyCode>>,
 ) {
     for (mut t, speed) in &mut query.iter_mut() {
+        let mut vec = Vec3::ZERO;
         if keyboard_input.pressed(KeyCode::KeyW) {
-            t.translation.y += speed.0;
+            vec.x += 1.0;
         }
         if keyboard_input.pressed(KeyCode::KeyS) {
-            t.translation.y -= speed.0;
+            vec.y -= 1.0;
         }
         if keyboard_input.pressed(KeyCode::KeyA) {
-            t.translation.x -= speed.0;
+            vec.x -= 1.0;
         }
         if keyboard_input.pressed(KeyCode::KeyD) {
-            t.translation.x += speed.0;
+            vec.x += 1.0;
         }
+        let move_vec = vec.normalize() * speed.0;
+        t.translation += move_vec;
     }
 }
+
