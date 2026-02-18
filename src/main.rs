@@ -5,8 +5,10 @@ use bevy::app::App;
 use bevy::asset::RenderAssetUsages;
 use bevy::color::palettes::css;
 use bevy::prelude::*;
-use bevy::render::render_resource::Extent3d;
 use bevy::render::render_resource::{Extent3d, TextureDimension, TextureFormat};
+
+#[derive(Resource)]
+pub struct PlaceholderTex(Handle<Image>);
 
 #[derive(Component)]
 pub struct Player;
@@ -34,10 +36,16 @@ fn generate_placeholder_tex(mut commands: Commands, mut images: ResMut<Assets<Im
         Extent3d {
             width: 32,
             height: 32,
+            depth_or_array_layers: 1,
         },
         TextureDimension::D2,
         &(css::BEIGE.to_u8_array()),
         TextureFormat::Rgba8UnormSrgb,
         RenderAssetUsages::MAIN_WORLD | RenderAssetUsages::RENDER_WORLD,
     );
+
+    let handle = images.add(image);
+
+    commands.spawn(Sprite::from_image(handle.clone()));
+    commands.insert_resource(PlaceholderTex(handle));
 }
