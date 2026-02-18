@@ -9,7 +9,7 @@ pub struct Speed(f32);
 pub struct Dash {
     speed: f32,
     timer: Timer,
-    duration: i32,
+    duration: u64,
     def_speed: f32,
 }
 
@@ -77,3 +77,4 @@ fn dash_player(
         }
     }
 }
+
