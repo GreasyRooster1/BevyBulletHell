@@ -22,8 +22,8 @@ pub struct Position {
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_systems(PreStartup, (setup, generate_placeholder_tex))
         .add_plugins(PlayerPlugin)
-        .add_systems(Startup, (setup, generate_placeholder_tex))
         .run();
 }
 
@@ -46,6 +46,6 @@ fn generate_placeholder_tex(mut commands: Commands, mut images: ResMut<Assets<Im
 
     let handle = images.add(image);
 
-    commands.spawn(Sprite::from_image(handle.clone()));
+    //commands.spawn(Sprite::from_image(handle.clone()));
     commands.insert_resource(PlaceholderTex(handle));
 }
