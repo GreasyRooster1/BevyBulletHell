@@ -68,7 +68,7 @@ fn dash_player(
     for (mut dash, mut speed) in query.iter_mut() {
         dash.timer.tick(time.delta());
         if keyboard_input.just_pressed(KeyCode::Space) && dash.timer.is_finished() {
-            dash.timer = Timer::new(Duration::from_millis(500), TimerMode::Once);
+            dash.timer = Timer::new(Duration::from_millis(dash.duration), TimerMode::Once);
             dash.def_speed = speed.0;
             speed.0 = dash.speed;
         }
@@ -77,4 +77,3 @@ fn dash_player(
         }
     }
 }
-
