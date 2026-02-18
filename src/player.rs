@@ -29,7 +29,7 @@ fn move_player(
     for (mut t, speed) in &mut query.iter_mut() {
         let mut vec = Vec3::ZERO;
         if keyboard_input.pressed(KeyCode::KeyW) {
-            vec.x += 1.0;
+            vec.y += 1.0;
         }
         if keyboard_input.pressed(KeyCode::KeyS) {
             vec.y -= 1.0;
@@ -40,8 +40,7 @@ fn move_player(
         if keyboard_input.pressed(KeyCode::KeyD) {
             vec.x += 1.0;
         }
-        let move_vec = vec.normalize() * speed.0;
+        let move_vec = vec.normalize_or_zero() * speed.0;
         t.translation += move_vec;
     }
 }
-
