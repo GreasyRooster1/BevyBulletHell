@@ -23,7 +23,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugins(PlayerPlugin)
-        .add_systems(Startup, setup)
+        .add_systems(Startup, (setup, generate_placeholder_tex))
         .run();
 }
 
@@ -32,7 +32,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 }
 
 fn generate_placeholder_tex(mut commands: Commands, mut images: ResMut<Assets<Image>>) {
-    let mut image = Image::new_fill(
+    let image = Image::new_fill(
         Extent3d {
             width: 32,
             height: 32,
