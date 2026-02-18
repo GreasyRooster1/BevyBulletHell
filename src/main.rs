@@ -1,4 +1,5 @@
 use bevy::app::App;
+use bevy::prelude::Component;
 
 #[derive(Component)]
 struct Player;
