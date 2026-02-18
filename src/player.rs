@@ -27,10 +27,10 @@ fn spawn_player(mut commands: Commands, handle: Res<PlaceholderTex>) {
         Player,
         Speed(4.0),
         Dash {
-            speed: 7.0,
+            speed: 14.0,
             def_speed: 4.0,
             duration: 500,
-            timer: Timer::default(),
+            timer: Timer::from_seconds(0., TimerMode::Once),
         },
         Transform::from_xyz(0.0, 0.0, 0.0),
         Sprite::from_image(handle.0.clone()),
@@ -66,14 +66,15 @@ fn dash_player(
     time: Res<Time>,
 ) {
     for (mut dash, mut speed) in query.iter_mut() {
-        if keyboard_input.just_pressed(KeyCode::Space) && !dash.timer.is_finished() {
+        dash.timer.tick(time.delta());
+        if keyboard_input.just_pressed(KeyCode::Space) && dash.timer.is_finished() {
             dash.timer = Timer::new(Duration::from_millis(500), TimerMode::Once);
             dash.def_speed = speed.0;
             speed.0 = dash.speed;
-            dash.timer.tick(time.delta());
         }
         if dash.timer.just_finished() {
             speed.0 = dash.def_speed
         }
     }
 }
+
