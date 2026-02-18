@@ -29,7 +29,7 @@ fn spawn_player(mut commands: Commands, handle: Res<PlaceholderTex>) {
         Dash {
             speed: 14.0,
             def_speed: 4.0,
-            duration: 500,
+            duration: 100,
             timer: Timer::from_seconds(0., TimerMode::Once),
         },
         Transform::from_xyz(0.0, 0.0, 0.0),
@@ -67,13 +67,13 @@ fn dash_player(
 ) {
     for (mut dash, mut speed) in query.iter_mut() {
         dash.timer.tick(time.delta());
+        if dash.timer.just_finished() {
+            speed.0 = dash.def_speed
+        }
         if keyboard_input.just_pressed(KeyCode::Space) && dash.timer.is_finished() {
             dash.timer = Timer::new(Duration::from_millis(dash.duration), TimerMode::Once);
             dash.def_speed = speed.0;
             speed.0 = dash.speed;
-        }
-        if dash.timer.just_finished() {
-            speed.0 = dash.def_speed
         }
     }
 }
