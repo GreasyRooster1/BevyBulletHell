@@ -9,6 +9,8 @@ pub struct Speed(f32);
 pub struct Dash {
     speed: f32,
     timer: Timer,
+    duration: i32,
+    def_speed: f32,
 }
 
 pub struct PlayerPlugin;
@@ -26,7 +28,9 @@ fn spawn_player(mut commands: Commands, handle: Res<PlaceholderTex>) {
         Speed(4.0),
         Dash {
             speed: 7.0,
-            timer: Timer::new(Duration::from_millis(500), TimerMode::Once),
+            def_speed: 4.0,
+            duration: 500,
+            timer: Timer::default(),
         },
         Transform::from_xyz(0.0, 0.0, 0.0),
         Sprite::from_image(handle.0.clone()),
@@ -57,14 +61,19 @@ fn move_player(
 }
 
 fn dash_player(
-    mut query: Query<(&Dash, &mut Speed), With<Player>>,
+    mut query: Query<(&mut Dash, &mut Speed), With<Player>>,
     keyboard_input: Res<ButtonInput<KeyCode>>,
+    time: Res<Time>,
 ) {
-    for (dash, mut speed) in query.iter_mut() {
-        if !keyboard_input.just_pressed(KeyCode::Space) {
-            continue;
+    for (mut dash, mut speed) in query.iter_mut() {
+        if keyboard_input.just_pressed(KeyCode::Space) && !dash.timer.is_finished() {
+            dash.timer = Timer::new(Duration::from_millis(500), TimerMode::Once);
+            dash.def_speed = speed.0;
+            speed.0 = dash.speed;
+            dash.timer.tick(time.delta());
         }
-        speed.0 = dash.speed;
+        if dash.timer.just_finished() {
+            speed.0 = dash.def_speed
+        }
     }
 }
-
