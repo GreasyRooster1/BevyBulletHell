@@ -27,7 +27,7 @@ fn spawn_player(mut commands: Commands, handle: Res<PlaceholderTex>) {
         Player,
         Speed(4.0),
         Dash {
-            speed: 14.0,
+            speed: 20.0,
             def_speed: 4.0,
             duration: 100,
             timer: Timer::from_seconds(0., TimerMode::Once),
@@ -77,4 +77,3 @@ fn dash_player(
         }
     }
 }
-
