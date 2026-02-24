@@ -1,4 +1,5 @@
 mod player;
+mod enemy;
 
 use crate::player::*;
 use bevy::app::App;
