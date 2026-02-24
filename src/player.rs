@@ -86,6 +86,6 @@ fn wrap_player(
     let (w,h) = (window.resolution.width(),window.resolution.height());
     for mut t in query{
         t.translation.x = (t.translation.x + w/2. + w)%w -w/2.;
-        t.translation.y %= window.resolution.height();
+        t.translation.y = (t.translation.y + h/2. + h)%h -h/2.;
     }
 }
