@@ -27,7 +27,7 @@ fn spawn_enemies(
     if timer.0.just_finished() {
         commands.spawn((
             Enemy,
-            Transform::from_xyz(0.0, 0.0, 0.0),
+            Transform::from_xyz(0.0, 100.0, 0.0),
             Sprite::from_image(handle.0.clone()),
         ));
     }
