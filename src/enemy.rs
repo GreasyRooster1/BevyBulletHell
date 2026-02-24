@@ -11,7 +11,7 @@ pub struct Enemy;
 impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, (spawn_enemies))
-            .init_resource::<SpawnTimer>();
+            .insert_resource(SpawnTimer(Timer::from_seconds(2.0, TimerMode::Repeating)));
     }
 }
 
