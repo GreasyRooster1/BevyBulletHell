@@ -1,6 +1,7 @@
-mod player;
 mod enemy;
+mod player;
 
+use crate::enemy::*;
 use crate::player::*;
 use bevy::app::App;
 use bevy::asset::RenderAssetUsages;
@@ -25,6 +26,7 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_systems(PreStartup, (setup, generate_placeholder_tex))
         .add_plugins(PlayerPlugin)
+        .add_plugins(EnemyPlugin)
         .run();
 }
 

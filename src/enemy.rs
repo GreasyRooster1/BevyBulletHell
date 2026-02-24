@@ -1,3 +1,4 @@
+use crate::PlaceholderTex;
 use bevy::prelude::*;
 
 pub struct EnemyPlugin;
@@ -15,10 +16,19 @@ impl Plugin for EnemyPlugin {
     }
 }
 
-fn spawn_enemies(mut commands: Commands, mut timer: ResMut<SpawnTimer>, time: Res<Time>) {
+fn spawn_enemies(
+    mut commands: Commands,
+    mut timer: ResMut<SpawnTimer>,
+    time: Res<Time>,
+    handle: Res<PlaceholderTex>,
+) {
     timer.0.tick(time.delta());
 
     if timer.0.just_finished() {
-        commands.spawn((Enemy));
+        commands.spawn((
+            Enemy,
+            Transform::from_xyz(0.0, 0.0, 0.0),
+            Sprite::from_image(handle.0.clone()),
+        ));
     }
 }
