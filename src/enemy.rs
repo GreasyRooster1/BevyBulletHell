@@ -1,12 +1,15 @@
-
-
+use bevy::prelude::*;
 
 pub struct EnemyPlugin;
 
+#[derive(Resource, Default)]
+struct SpawnTimer(Timer);
+
 impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, spawn_player);
-        app.add_systems(Update, (move_player, dash_player,wrap_player));
+        app.add_systems(Update, (spawn_enemies))
+            .init_resource::<SpawnTimer>();
     }
 }
 
+fn spawn_enemies(timer: Res<SpawnTimer>) {}
