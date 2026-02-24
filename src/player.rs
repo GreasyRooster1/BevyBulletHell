@@ -77,3 +77,14 @@ fn dash_player(
         }
     }
 }
+
+fn wrap_player(
+    mut query: Query<&mut Transform,With<Player>>,
+    mut windows: Query<&mut Window>,
+    ){
+    let window = windows.single_mut().unwrap();
+    for mut t in query{
+        t.translation.x %= window.resolution.width();
+        t.translation.y %= window.resolution.height();
+    }
+}
