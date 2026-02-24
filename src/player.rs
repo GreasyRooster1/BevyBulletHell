@@ -18,7 +18,7 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_player);
-        app.add_systems(Update, (move_player, dash_player,wrap_player));
+        app.add_systems(Update, (move_player, dash_player));
     }
 }
 
@@ -81,11 +81,11 @@ fn dash_player(
 fn wrap_player(
     mut query: Query<&mut Transform,With<Player>>,
     mut windows: Query<&mut Window>,
-) {
-    let window = windows.single_mut().unwrap();
+    ){
+    let window = windows.single_mut();
+    let (w,h) = (window.resolution.width(),window.resolution.height())
     for mut t in query{
-        println!("{},{} {},{}",t.translation.x,t.translation.y,window.resolution.width(),window.resolution.height());
-        t.translation.x %= window.resolution.width();
+        t.translation.x = (t.translation.x + w/2)%w -w/2;
         t.translation.y %= window.resolution.height();
     }
 }
