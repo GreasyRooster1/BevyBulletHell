@@ -82,10 +82,10 @@ fn wrap_player(
     mut query: Query<&mut Transform,With<Player>>,
     mut windows: Query<&mut Window>,
     ){
-    let window = windows.single_mut();
-    let (w,h) = (window.resolution.width(),window.resolution.height())
+    let window = windows.single_mut().unwrap();
+    let (w,h) = (window.resolution.width(),window.resolution.height());
     for mut t in query{
-        t.translation.x = (t.translation.x + w/2)%w -w/2;
+        t.translation.x = (t.translation.x + w/2.)%w -w/2.;
         t.translation.y %= window.resolution.height();
     }
 }
