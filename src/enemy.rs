@@ -43,7 +43,8 @@ fn spawn_rock(
     commands.spawn((
         Enemy,
         Rock,
-        Transform::from_translation(get_random_vec3() * window.width()),
+        Transform::from_translation(get_random_vec3() * window.width())
+            .with_scale(Vec3::splat(10.0)),
         Sprite::from_image(asset_server.load("rock.png")),
     ));
 }

@@ -22,7 +22,7 @@ pub struct Velocity(Vec3);
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_systems(PreStartup, (setup, generate_placeholder_tex))
         .add_systems(Update, apply_velocity)
         .add_plugins(PlayerPlugin)
