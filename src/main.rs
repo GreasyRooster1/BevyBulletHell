@@ -8,6 +8,8 @@ use bevy::asset::RenderAssetUsages;
 use bevy::color::palettes::css;
 use bevy::prelude::*;
 use bevy::render::render_resource::{Extent3d, TextureDimension, TextureFormat};
+use rand;
+use rand::RngExt;
 
 #[derive(Resource)]
 pub struct PlaceholderTex(Handle<Image>);
@@ -55,4 +57,16 @@ fn generate_placeholder_tex(mut commands: Commands, mut images: ResMut<Assets<Im
 
     //commands.spawn(Sprite::from_image(handle.clone()));
     commands.insert_resource(PlaceholderTex(handle));
+}
+
+fn get_random_vec3() -> Vec3 {
+    let mut rng = rand::rng();
+
+    let x: f32 = rng.random_range(-1f32..=1f32);
+    let y: f32 = rng.random_range(-1f32..=1f32);
+    let z: f32 = rng.random_range(-1f32..=1f32);
+
+    let vec = Vec3::new(x, y, z);
+
+    vec.normalize()
 }

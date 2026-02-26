@@ -37,5 +37,11 @@ fn spawn_enemies(
 struct Rock;
 
 fn spawn_rock(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn((Enemy, Rock));
+    let pos = Vec3::from_array
+
+    commands.spawn((
+        Enemy,
+        Rock,
+        Transform::from_translation()
+    ));
 }
