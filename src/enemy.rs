@@ -46,6 +46,6 @@ fn spawn_rock(
         Rock,
         Transform::from_translation(pos).with_scale(Vec3::splat(3.0)),
         Sprite::from_image(asset_server.load("rock.png")),
-        Velocity((Vec3::ZERO - pos).normalize()),
+        Velocity((Vec3::ZERO - pos).normalize() * 3.0),
     ));
 }
