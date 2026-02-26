@@ -16,12 +16,13 @@ pub struct PlaceholderTex(Handle<Image>);
 pub struct Player;
 
 #[derive(Component)]
-pub struct Velocity(Vec2);
+pub struct Velocity(Vec3);
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(PreStartup, (setup, generate_placeholder_tex))
+        .add_systems(Update, apply_velocity)
         .add_plugins(PlayerPlugin)
         .add_plugins(EnemyPlugin)
         .run();
@@ -29,6 +30,12 @@ fn main() {
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(Camera2d);
+}
+
+fn apply_velocity(mut query: Query<(&mut Transform, &Velocity)>) {
+    for (mut t, vel) in &mut query.iter_mut() {
+        t.translation += vel.0;
+    }
 }
 
 fn generate_placeholder_tex(mut commands: Commands, mut images: ResMut<Assets<Image>>) {
