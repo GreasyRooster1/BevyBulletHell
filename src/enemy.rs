@@ -1,4 +1,4 @@
-use crate::PlaceholderTex;
+use crate::{PlaceholderTex, get_random_vec3};
 use bevy::prelude::*;
 
 pub struct EnemyPlugin;
@@ -21,27 +21,29 @@ fn spawn_enemies(
     mut timer: ResMut<SpawnTimer>,
     time: Res<Time>,
     handle: Res<PlaceholderTex>,
+    asset_server: Res<AssetServer>,
+    mut windows: Query<&mut Window>,
 ) {
     timer.0.tick(time.delta());
 
     if timer.0.just_finished() {
-        commands.spawn((
-            Enemy,
-            Transform::from_xyz(0.0, 100.0, 0.0),
-            Sprite::from_image(handle.0.clone()),
-        ));
+        spawn_rock(commands, asset_server, windows)
     }
 }
 
 #[derive(Component)]
 struct Rock;
 
-fn spawn_rock(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let pos = Vec3::from_array
-
+fn spawn_rock(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    mut windows: Query<&mut Window>,
+) {
+    let window = windows.single_inner().unwrap();
     commands.spawn((
         Enemy,
         Rock,
-        Transform::from_translation()
+        Transform::from_translation(get_random_vec3() * window.width()),
+        Sprite::from_image(asset_server.load("rock.png")),
     ));
 }

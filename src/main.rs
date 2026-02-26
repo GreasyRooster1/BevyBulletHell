@@ -59,7 +59,7 @@ fn generate_placeholder_tex(mut commands: Commands, mut images: ResMut<Assets<Im
     commands.insert_resource(PlaceholderTex(handle));
 }
 
-fn get_random_vec3() -> Vec3 {
+pub fn get_random_vec3() -> Vec3 {
     let mut rng = rand::rng();
 
     let x: f32 = rng.random_range(-1f32..=1f32);
