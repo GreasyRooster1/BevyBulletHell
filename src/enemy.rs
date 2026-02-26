@@ -32,3 +32,5 @@ fn spawn_enemies(
         ));
     }
 }
+
+fn spawn_rock() {}
