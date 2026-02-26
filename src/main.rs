@@ -16,10 +16,7 @@ pub struct PlaceholderTex(Handle<Image>);
 pub struct Player;
 
 #[derive(Component)]
-pub struct Position {
-    x: f32,
-    y: f32,
-}
+pub struct Velocity(Vec2);
 
 fn main() {
     App::new()

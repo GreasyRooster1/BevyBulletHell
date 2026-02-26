@@ -37,5 +37,5 @@ fn spawn_enemies(
 struct Rock;
 
 fn spawn_rock(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn((Enemy, Rock))
+    commands.spawn((Enemy, Rock));
 }
