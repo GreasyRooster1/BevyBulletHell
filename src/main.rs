@@ -64,9 +64,8 @@ pub fn get_random_vec3() -> Vec3 {
 
     let x: f32 = rng.random_range(-1f32..=1f32);
     let y: f32 = rng.random_range(-1f32..=1f32);
-    let z: f32 = rng.random_range(-1f32..=1f32);
 
-    let vec = Vec3::new(x, y, z);
+    let vec = Vec3::new(x, y, 1.0);
 
     vec.normalize()
 }

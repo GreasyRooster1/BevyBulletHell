@@ -1,4 +1,4 @@
-use crate::{PlaceholderTex, Velocity, get_random_vec3};
+use crate::{PlaceholderTex, Player, Velocity, get_random_vec3};
 use bevy::prelude::*;
 
 pub struct EnemyPlugin;
@@ -12,7 +12,7 @@ pub struct Enemy;
 impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, (spawn_enemies))
-            .insert_resource(SpawnTimer(Timer::from_seconds(2.0, TimerMode::Repeating)));
+            .insert_resource(SpawnTimer(Timer::from_seconds(0.1, TimerMode::Repeating)));
     }
 }
 
@@ -23,11 +23,17 @@ fn spawn_enemies(
     handle: Res<PlaceholderTex>,
     asset_server: Res<AssetServer>,
     mut windows: Query<&mut Window>,
+    player_transform: Single<&Transform, With<Player>>,
 ) {
     timer.0.tick(time.delta());
 
     if timer.0.just_finished() {
-        spawn_rock(commands, asset_server, windows)
+        spawn_rock(
+            commands,
+            asset_server,
+            windows,
+            player_transform.into_inner(),
+        )
     }
 }
 
@@ -38,6 +44,7 @@ fn spawn_rock(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut windows: Query<&mut Window>,
+    player_t: &Transform,
 ) {
     let window = windows.single_inner().unwrap();
     let pos = get_random_vec3().normalize() * window.width();
@@ -46,6 +53,6 @@ fn spawn_rock(
         Rock,
         Transform::from_translation(pos).with_scale(Vec3::splat(3.0)),
         Sprite::from_image(asset_server.load("rock.png")),
-        Velocity((Vec3::ZERO - pos).normalize() * 3.0),
+        Velocity((player_t.translation - pos).normalize() * 3.0),
     ));
 }
