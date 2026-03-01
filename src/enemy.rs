@@ -11,8 +11,8 @@ pub struct Enemy;
 
 impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (spawn_enemies))
-            .insert_resource(SpawnTimer(Timer::from_seconds(0.1, TimerMode::Repeating)));
+        app.add_systems(Update, (spawn_enemies, rotate_rock))
+            .insert_resource(SpawnTimer(Timer::from_seconds(1.0, TimerMode::Repeating)));
     }
 }
 
@@ -32,19 +32,42 @@ fn spawn_enemies(
         let window = windows.single_inner().unwrap();
         let pos = get_random_vec3().normalize() * window.width();
         let vel = (player_t.translation - pos).normalize();
-        spawn_rock(commands, asset_server, pos, vel)
+
+        spawn_rock(&mut commands, &asset_server, pos, vel);
+        spawn_missile(&mut commands, &asset_server, pos, vel);
+    }
+}
+
+fn rotate_rock(mut query: Query<&mut Transform, With<Rock>>) {
+    for mut transform in query.iter_mut() {
+        transform.rotate_z(0.1);
     }
 }
 
 #[derive(Component)]
 struct Rock;
 
-fn spawn_rock(mut commands: Commands, asset_server: Res<AssetServer>, pos: Vec3, vel: Vec3) {
+fn spawn_rock(commands: &mut Commands, asset_server: &Res<AssetServer>, pos: Vec3, vel: Vec3) {
     commands.spawn((
         Enemy,
         Rock,
         Transform::from_translation(pos).with_scale(Vec3::splat(3.0)),
         Sprite::from_image(asset_server.load("rock.png")),
         Velocity(vel * 3.0),
+    ));
+}
+
+#[derive(Component)]
+struct Missile {
+    fuel: f32,
+}
+
+fn spawn_missile(commands: &mut Commands, asset_server: &Res<AssetServer>, pos: Vec3, vel: Vec3) {
+    commands.spawn((
+        Enemy,
+        Missile { fuel: 100.0 },
+        Transform::from_translation(pos).with_scale(Vec3::splat(3.0)),
+        Sprite::from_image(asset_server.load("missile.png")),
+        Velocity(vel * 2.0),
     ));
 }
