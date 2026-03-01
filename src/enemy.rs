@@ -44,6 +44,19 @@ fn rotate_rock(mut query: Query<&mut Transform, With<Rock>>) {
     }
 }
 
+fn guide_missile(
+    mut query: Query<(&mut Velocity, &Transform, &mut Missile)>,
+    player_transform: Single<&Transform, With<Player>>,
+) {
+    let p_pos = player_transform.into_inner().translation;
+    for (mut vel, t, mut missile) in query.iter_mut() {
+        if (missile.fuel > 0.0) {
+            missile.fuel -= 1.0;
+            vel.into_inner().0 += ((p_pos - t.translation) as Vec3).normalize() * 0.25;
+        }
+    }
+}
+
 #[derive(Component)]
 struct Rock;
 
