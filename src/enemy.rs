@@ -43,7 +43,7 @@ struct Rock;
 fn spawn_rock(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    mut windows: Query<&mut Window>,
+    windows: Query<&mut Window>,
     player_t: &Transform,
 ) {
     let window = windows.single_inner().unwrap();
