@@ -28,31 +28,23 @@ fn spawn_enemies(
     timer.0.tick(time.delta());
 
     if timer.0.just_finished() {
-        spawn_rock(
-            commands,
-            asset_server,
-            windows,
-            player_transform.into_inner(),
-        )
+        let player_t = player_transform.into_inner();
+        let window = windows.single_inner().unwrap();
+        let pos = get_random_vec3().normalize() * window.width();
+        let vel = (player_t.translation - pos).normalize();
+        spawn_rock(commands, asset_server, pos, vel)
     }
 }
 
 #[derive(Component)]
 struct Rock;
 
-fn spawn_rock(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    windows: Query<&mut Window>,
-    player_t: &Transform,
-) {
-    let window = windows.single_inner().unwrap();
-    let pos = get_random_vec3().normalize() * window.width();
+fn spawn_rock(mut commands: Commands, asset_server: Res<AssetServer>, pos: Vec3, vel: Vec3) {
     commands.spawn((
         Enemy,
         Rock,
         Transform::from_translation(pos).with_scale(Vec3::splat(3.0)),
         Sprite::from_image(asset_server.load("rock.png")),
-        Velocity((player_t.translation - pos).normalize() * 3.0),
+        Velocity(vel * 3.0),
     ));
 }
